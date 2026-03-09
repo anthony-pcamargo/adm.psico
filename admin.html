@@ -1,0 +1,1472 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin · Mari Pierami</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Mulish:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --w:      #FAFAF8;
+  --w2:     #F4F2EE;
+  --w3:     #ECE9E3;
+  --ink:    #1C1A17;
+  --ink2:   #4A4640;
+  --ink3:   #8C867E;
+  --sage:   #6B9C65;
+  --sage-d: #4f7a4a;
+  --sage-l: #9dc497;
+  --sage-bg: rgba(107,156,101,.09);
+  --sage-bd: rgba(107,156,101,.26);
+  --terra:  #B07048;
+  --terra-bg: rgba(176,112,72,.08);
+  --terra-bd: rgba(176,112,72,.22);
+  --blue:   #4A7FA5;
+  --blue-bg: rgba(74,127,165,.08);
+  --red:    #C0392B;
+  --red-bg: rgba(192,57,43,.08);
+  --line:   rgba(28,26,23,.08);
+  --line2:  rgba(28,26,23,.14);
+  --ease:   cubic-bezier(.4,0,.2,1);
+  --spring: cubic-bezier(.34,1.56,.64,1);
+  --sb:     220px;
+}
+
+*,*::before,*::after { margin:0; padding:0; box-sizing:border-box }
+html { scroll-behavior:smooth }
+body {
+  font-family:'Mulish',sans-serif;
+  background:var(--w2);
+  color:var(--ink);
+  -webkit-font-smoothing:antialiased;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+a { color:inherit; text-decoration:none }
+button { font-family:inherit; cursor:pointer; background:none; border:none; outline:none }
+input,select,textarea { font-family:inherit; outline:none }
+
+/* grain overlay */
+body::after {
+  content:''; position:fixed; inset:0; z-index:9999; pointer-events:none; opacity:.022;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ══════════════════════════════════════
+   LOGIN
+══════════════════════════════════════ */
+#login-page {
+  min-height:100vh;
+  display:flex;
+  background:var(--ink);
+  position:relative;
+  overflow:hidden;
+}
+
+/* decorative left panel */
+.login-left {
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  padding:52px 56px;
+  position:relative;
+  overflow:hidden;
+}
+.login-left::before {
+  content:'';
+  position:absolute; inset:0;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 50%, rgba(107,156,101,.22) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 70% at 80% 20%, rgba(176,112,72,.12) 0%, transparent 60%);
+}
+/* large italic text decoration */
+.login-deco {
+  position:absolute;
+  bottom:-24px; left:40px;
+  font-family:'DM Serif Display',serif;
+  font-size:clamp(6rem,11vw,10rem);
+  font-style:italic;
+  color:rgba(255,255,255,.03);
+  line-height:1;
+  user-select:none;
+  pointer-events:none;
+  white-space:nowrap;
+}
+.login-brand {
+  position:relative;
+  z-index:1;
+}
+.login-brand-name {
+  font-family:'DM Serif Display',serif;
+  font-size:1.5rem;
+  color:#fff;
+  display:block;
+  margin-bottom:6px;
+}
+.login-brand-crp {
+  font-size:.6rem; font-weight:700;
+  letter-spacing:.2em; text-transform:uppercase;
+  color:rgba(255,255,255,.3);
+}
+.login-left-footer {
+  position:relative; z-index:1;
+}
+.login-tagline {
+  font-family:'DM Serif Display',serif;
+  font-size:clamp(1.6rem,2.8vw,2.4rem);
+  line-height:1.15;
+  color:rgba(255,255,255,.85);
+  margin-bottom:16px;
+}
+.login-tagline em { font-style:italic; color:var(--sage-l) }
+.login-left-sub {
+  font-size:.78rem; font-weight:300;
+  color:rgba(255,255,255,.3);
+  line-height:1.7;
+  max-width:280px;
+}
+
+/* right panel — form */
+.login-right {
+  width:440px;
+  flex-shrink:0;
+  background:var(--w);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:48px 52px;
+  position:relative;
+}
+.login-right::before {
+  content:'';
+  position:absolute;
+  left:0; top:15%; bottom:15%;
+  width:1px;
+  background:linear-gradient(180deg, transparent, rgba(28,26,23,.12) 30%, rgba(28,26,23,.12) 70%, transparent);
+}
+.login-form-inner {
+  width:100%;
+  animation:slideUp .55s var(--spring) both;
+}
+@keyframes slideUp {
+  from { opacity:0; transform:translateY(20px) }
+  to   { opacity:1; transform:translateY(0) }
+}
+
+.lf-eyebrow {
+  font-size:.62rem; font-weight:700;
+  letter-spacing:.22em; text-transform:uppercase;
+  color:var(--sage);
+  display:flex; align-items:center; gap:8px;
+  margin-bottom:20px;
+}
+.lf-eyebrow::before {
+  content:''; width:18px; height:1.5px; background:var(--sage);
+}
+.lf-title {
+  font-family:'DM Serif Display',serif;
+  font-size:2.2rem;
+  line-height:1.1;
+  color:var(--ink);
+  margin-bottom:36px;
+}
+.lf-title em { font-style:italic; color:var(--sage) }
+
+.lf-field { margin-bottom:20px }
+.lf-label {
+  display:block;
+  font-size:.65rem; font-weight:700;
+  letter-spacing:.14em; text-transform:uppercase;
+  color:var(--ink3);
+  margin-bottom:8px;
+}
+.lf-input-wrap { position:relative }
+.lf-input-wrap svg {
+  position:absolute;
+  left:14px; top:50%; transform:translateY(-50%);
+  color:var(--ink3);
+  pointer-events:none;
+  transition:color .2s;
+}
+.lf-input {
+  width:100%;
+  padding:13px 14px 13px 40px;
+  background:var(--w2);
+  border:1.5px solid var(--line2);
+  border-radius:10px;
+  font-size:.9rem;
+  color:var(--ink);
+  transition:border-color .22s, box-shadow .22s, background .22s;
+}
+.lf-input:focus {
+  border-color:var(--sage);
+  box-shadow:0 0 0 3px var(--sage-bg);
+  background:var(--w);
+}
+.lf-input:focus + svg,
+.lf-input-wrap:focus-within svg { color:var(--sage) }
+/* fix icon order — icon before input in DOM */
+.lf-input-wrap .lf-icon {
+  position:absolute; left:14px; top:50%; transform:translateY(-50%);
+  pointer-events:none; transition:color .2s; color:var(--ink3);
+}
+
+.lf-error {
+  height:20px;
+  font-size:.75rem; font-weight:600;
+  color:var(--red);
+  display:flex; align-items:center; gap:6px;
+  margin-bottom:10px;
+  opacity:0; transform:translateX(-4px);
+  transition:opacity .2s, transform .2s;
+}
+.lf-error.visible { opacity:1; transform:translateX(0) }
+
+.lf-btn {
+  width:100%;
+  padding:15px;
+  background:var(--ink);
+  color:#fff;
+  border-radius:10px;
+  font-size:.8rem; font-weight:700;
+  letter-spacing:.1em; text-transform:uppercase;
+  transition:background .25s, transform .2s var(--spring), box-shadow .25s;
+  box-shadow:0 6px 24px rgba(28,26,23,.2);
+  position:relative; overflow:hidden;
+}
+.lf-btn::before {
+  content:'';
+  position:absolute; inset:0;
+  background:linear-gradient(135deg, var(--sage), var(--sage-d));
+  opacity:0; transition:opacity .3s;
+}
+.lf-btn:hover::before { opacity:1 }
+.lf-btn:hover { transform:translateY(-2px); box-shadow:0 12px 32px rgba(28,26,23,.25) }
+.lf-btn:active { transform:translateY(0) }
+.lf-btn span { position:relative; z-index:1 }
+
+.lf-hint {
+  margin-top:24px;
+  padding:14px 16px;
+  background:var(--w2);
+  border:1px solid var(--line2);
+  border-radius:10px;
+  border-left:3px solid var(--sage);
+}
+.lf-hint p {
+  font-size:.7rem;
+  color:var(--ink3);
+  line-height:1.7;
+}
+.lf-hint code {
+  font-family:monospace;
+  font-size:.78rem;
+  color:var(--ink2);
+  background:var(--w3);
+  padding:1px 5px;
+  border-radius:4px;
+}
+
+/* ══════════════════════════════════════
+   DASHBOARD LAYOUT
+══════════════════════════════════════ */
+#dashboard-page { display:none }
+
+.layout {
+  display:flex;
+  min-height:100vh;
+}
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width:var(--sb);
+  flex-shrink:0;
+  background:var(--ink);
+  display:flex;
+  flex-direction:column;
+  position:fixed;
+  top:0; left:0; bottom:0;
+  z-index:200;
+  overflow:hidden;
+}
+/* subtle vertical line accent */
+.sidebar::after {
+  content:'';
+  position:absolute; top:0; right:0; bottom:0;
+  width:1px;
+  background:linear-gradient(180deg, transparent, rgba(255,255,255,.06) 20%, rgba(255,255,255,.06) 80%, transparent);
+}
+
+.sb-top {
+  padding:28px 20px 24px;
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+.sb-avatar {
+  width:40px; height:40px;
+  border-radius:12px;
+  background:linear-gradient(135deg, var(--sage-bg), var(--sage-bd));
+  border:1px solid var(--sage-bd);
+  display:flex; align-items:center; justify-content:center;
+  font-family:'DM Serif Display',serif;
+  font-size:1rem;
+  color:var(--sage-l);
+  margin-bottom:12px;
+}
+.sb-name {
+  font-family:'DM Serif Display',serif;
+  font-size:1rem; color:#fff;
+  display:block; line-height:1.2;
+}
+.sb-role {
+  font-size:.58rem; font-weight:700;
+  letter-spacing:.18em; text-transform:uppercase;
+  color:rgba(255,255,255,.25);
+  margin-top:3px; display:block;
+}
+
+.sb-nav {
+  flex:1;
+  padding:20px 12px;
+  display:flex; flex-direction:column; gap:2px;
+  overflow-y:auto;
+}
+.sb-group-label {
+  font-size:.56rem; font-weight:700;
+  letter-spacing:.2em; text-transform:uppercase;
+  color:rgba(255,255,255,.18);
+  padding:14px 8px 6px;
+}
+.sb-item {
+  display:flex; align-items:center; gap:10px;
+  padding:10px 12px;
+  border-radius:9px;
+  font-size:.77rem; font-weight:600;
+  color:rgba(255,255,255,.38);
+  cursor:pointer;
+  transition:background .18s, color .18s;
+  text-decoration:none;
+  position:relative;
+}
+.sb-item:hover { background:rgba(255,255,255,.06); color:rgba(255,255,255,.7) }
+.sb-item.active {
+  background:rgba(107,156,101,.18);
+  color:var(--sage-l);
+}
+.sb-item.active::before {
+  content:'';
+  position:absolute; left:-12px; top:50%;
+  transform:translateY(-50%);
+  width:3px; height:18px;
+  background:var(--sage);
+  border-radius:0 3px 3px 0;
+}
+.sb-item svg { flex-shrink:0; opacity:.7 }
+.sb-item.active svg { opacity:1 }
+
+.sb-bottom {
+  padding:16px 12px;
+  border-top:1px solid rgba(255,255,255,.06);
+}
+.sb-logout {
+  display:flex; align-items:center; gap:10px;
+  width:100%; padding:10px 12px;
+  border-radius:9px;
+  font-size:.75rem; font-weight:600;
+  color:rgba(255,255,255,.28);
+  transition:background .18s, color .18s;
+}
+.sb-logout:hover { background:rgba(192,57,43,.12); color:#e87a6a }
+
+/* ── MAIN ── */
+.main {
+  flex:1;
+  margin-left:var(--sb);
+  padding:36px 44px 60px;
+  min-width:0;
+}
+
+/* ── TOPBAR ── */
+.topbar {
+  display:flex; align-items:flex-start; justify-content:space-between;
+  margin-bottom:36px;
+  padding-bottom:28px;
+  border-bottom:1px solid var(--line2);
+}
+.tb-greeting {
+  font-family:'DM Serif Display',serif;
+  font-size:1.75rem;
+  color:var(--ink);
+  line-height:1.15;
+}
+.tb-greeting em { font-style:italic; color:var(--sage) }
+.tb-date {
+  font-size:.78rem; font-weight:300;
+  color:var(--ink3);
+  margin-top:5px;
+}
+.tb-right { display:flex; align-items:center; gap:10px }
+.tb-pill {
+  padding:7px 16px;
+  background:var(--w);
+  border:1px solid var(--line2);
+  border-radius:50px;
+  font-size:.7rem; font-weight:700;
+  letter-spacing:.08em; text-transform:uppercase;
+  color:var(--ink3);
+  white-space:nowrap;
+}
+.tb-pill.month {
+  background:var(--sage-bg);
+  border-color:var(--sage-bd);
+  color:var(--sage);
+}
+
+/* ══════════════════════════════════════
+   KPI CARDS
+══════════════════════════════════════ */
+.kpi-row {
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:16px;
+  margin-bottom:24px;
+}
+
+.kcard {
+  background:var(--w);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:0;
+  position:relative;
+  overflow:hidden;
+  transition:box-shadow .3s, transform .3s var(--spring);
+  cursor:default;
+  animation:cardIn .5s var(--spring) both;
+}
+.kcard:nth-child(1) { animation-delay:.05s }
+.kcard:nth-child(2) { animation-delay:.12s }
+.kcard:nth-child(3) { animation-delay:.19s }
+@keyframes cardIn {
+  from { opacity:0; transform:translateY(16px) }
+  to   { opacity:1; transform:translateY(0) }
+}
+.kcard:hover { box-shadow:0 16px 48px rgba(28,26,23,.08); transform:translateY(-3px) }
+
+/* top color stripe */
+.kcard-stripe {
+  height:3px;
+  background:var(--stripe-color, var(--sage));
+}
+.kcard-body { padding:24px 22px 20px }
+
+.kcard-head {
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:20px;
+}
+.kcard-icon {
+  width:38px; height:38px;
+  border-radius:10px;
+  display:flex; align-items:center; justify-content:center;
+  background:var(--icon-bg, var(--sage-bg));
+  font-size:1.1rem;
+}
+.kcard-actions { display:flex; align-items:center; gap:4px }
+.kcard-edit {
+  width:28px; height:28px;
+  border-radius:7px;
+  display:flex; align-items:center; justify-content:center;
+  color:var(--ink3);
+  transition:background .18s, color .18s;
+}
+.kcard-edit:hover { background:var(--sage-bg); color:var(--sage) }
+.kcard-edit.active { background:var(--sage); color:#fff }
+
+.kcard-label {
+  font-size:.62rem; font-weight:700;
+  letter-spacing:.16em; text-transform:uppercase;
+  color:var(--ink3);
+  margin-bottom:6px;
+}
+.kcard-value {
+  font-family:'DM Serif Display',serif;
+  font-size:2.3rem; line-height:1;
+  letter-spacing:-.02em;
+  color:var(--val-color, var(--ink));
+  transition:opacity .15s;
+}
+.kcard-input {
+  font-family:'DM Serif Display',serif;
+  font-size:2rem; line-height:1;
+  letter-spacing:-.02em;
+  color:var(--sage);
+  border:none;
+  border-bottom:2px solid var(--sage);
+  background:transparent;
+  width:100%;
+  padding-bottom:2px;
+  display:none;
+}
+.kcard-sub {
+  margin-top:14px;
+  font-size:.7rem; font-weight:600;
+  color:var(--ink3);
+  display:flex; align-items:center; gap:5px;
+}
+.kcard-sub.up   { color:var(--sage) }
+.kcard-sub.down { color:var(--red) }
+
+/* sparkline area */
+.kcard-spark {
+  height:38px;
+  padding:0 22px 16px;
+}
+.kcard-spark svg { display:block; overflow:visible }
+
+/* ══════════════════════════════════════
+   NOTES CARD (novo)
+══════════════════════════════════════ */
+.notes-strip {
+  background:var(--w);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:20px 24px;
+  margin-bottom:24px;
+  display:flex; align-items:flex-start; gap:20px;
+  animation:cardIn .5s .26s var(--spring) both;
+}
+.notes-icon {
+  width:36px; height:36px; flex-shrink:0;
+  border-radius:10px;
+  background:rgba(176,112,72,.1);
+  display:flex; align-items:center; justify-content:center;
+  font-size:1rem;
+  margin-top:1px;
+}
+.notes-body { flex:1 }
+.notes-label {
+  font-size:.6rem; font-weight:700;
+  letter-spacing:.16em; text-transform:uppercase;
+  color:var(--ink3); margin-bottom:6px;
+}
+#notes-textarea {
+  width:100%; min-height:48px; max-height:160px;
+  background:transparent; border:none;
+  font-size:.88rem; font-weight:300;
+  color:var(--ink2); line-height:1.75;
+  resize:none;
+  overflow:hidden;
+}
+#notes-textarea::placeholder { color:var(--ink3); font-style:italic }
+.notes-saved {
+  font-size:.65rem; font-weight:600;
+  color:var(--sage);
+  opacity:0; transition:opacity .3s;
+  margin-top:4px;
+}
+.notes-saved.show { opacity:1 }
+
+/* ══════════════════════════════════════
+   BOTTOM PANELS
+══════════════════════════════════════ */
+.panels-row {
+  display:grid;
+  grid-template-columns:1fr 1.45fr;
+  gap:16px;
+}
+
+.panel {
+  background:var(--w);
+  border:1px solid var(--line);
+  border-radius:18px;
+  overflow:hidden;
+  display:flex; flex-direction:column;
+  animation:cardIn .5s var(--spring) both;
+}
+.panel:nth-child(1) { animation-delay:.3s }
+.panel:nth-child(2) { animation-delay:.38s }
+
+.panel-head {
+  padding:18px 22px 16px;
+  border-bottom:1px solid var(--line);
+  display:flex; align-items:center; justify-content:space-between;
+  flex-shrink:0;
+}
+.panel-title {
+  font-family:'DM Serif Display',serif;
+  font-size:1.05rem; color:var(--ink);
+  display:flex; align-items:center; gap:10px;
+}
+.panel-count {
+  font-family:'Mulish',sans-serif;
+  font-size:.65rem; font-weight:700;
+  background:var(--w3);
+  border:1px solid var(--line2);
+  color:var(--ink3);
+  padding:2px 8px; border-radius:50px;
+}
+
+.btn-add {
+  display:inline-flex; align-items:center; gap:6px;
+  padding:7px 14px;
+  border-radius:8px;
+  font-size:.68rem; font-weight:700;
+  letter-spacing:.07em; text-transform:uppercase;
+  transition:background .18s, color .18s, transform .18s var(--spring), border-color .18s;
+  border:1px solid transparent;
+}
+.btn-add.green {
+  background:var(--sage-bg); border-color:var(--sage-bd); color:var(--sage);
+}
+.btn-add.green:hover { background:var(--sage); color:#fff; border-color:var(--sage); transform:translateY(-1px) }
+.btn-add.terra {
+  background:var(--terra-bg); border-color:var(--terra-bd); color:var(--terra);
+}
+.btn-add.terra:hover { background:var(--terra); color:#fff; border-color:var(--terra); transform:translateY(-1px) }
+
+.panel-scroll { flex:1; overflow-y:auto; max-height:340px }
+.panel-scroll::-webkit-scrollbar { width:4px }
+.panel-scroll::-webkit-scrollbar-thumb { background:var(--line2); border-radius:50px }
+
+/* ── Patient rows ── */
+.pat-row {
+  display:flex; align-items:center; gap:12px;
+  padding:11px 22px;
+  border-bottom:1px solid var(--line);
+  transition:background .15s;
+  position:relative;
+}
+.pat-row:last-child { border-bottom:none }
+.pat-row:hover { background:var(--w2) }
+
+.pat-av {
+  width:32px; height:32px; flex-shrink:0;
+  border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-family:'DM Serif Display',serif;
+  font-size:.8rem;
+  border:1.5px solid transparent;
+}
+/* avatar color by index */
+.av-0 { background:rgba(107,156,101,.12); color:var(--sage); border-color:var(--sage-bd) }
+.av-1 { background:rgba(176,112,72,.12); color:var(--terra); border-color:var(--terra-bd) }
+.av-2 { background:rgba(74,127,165,.12); color:var(--blue); border-color:rgba(74,127,165,.25) }
+.av-3 { background:rgba(140,134,126,.12); color:var(--ink2); border-color:var(--line2) }
+
+.pat-info { flex:1; min-width:0 }
+.pat-name { font-size:.85rem; font-weight:600; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis }
+.pat-meta { font-size:.7rem; font-weight:300; color:var(--ink3) }
+
+.pat-badge {
+  padding:3px 9px; border-radius:50px;
+  font-size:.6rem; font-weight:700;
+  letter-spacing:.07em; text-transform:uppercase;
+  white-space:nowrap;
+}
+.pb-active  { background:var(--sage-bg); color:var(--sage); border:1px solid var(--sage-bd) }
+.pb-new     { background:rgba(37,211,102,.1); color:#19a74a; border:1px solid rgba(37,211,102,.22) }
+.pb-paused  { background:var(--terra-bg); color:var(--terra); border:1px solid var(--terra-bd) }
+
+.pat-del {
+  opacity:0; transition:opacity .15s, color .15s, background .15s;
+  padding:4px; border-radius:6px; color:var(--ink3);
+  flex-shrink:0;
+}
+.pat-row:hover .pat-del { opacity:1 }
+.pat-del:hover { color:var(--red); background:var(--red-bg) }
+
+/* ── Payment rows ── */
+.pay-row {
+  display:flex; align-items:center; gap:12px;
+  padding:12px 22px;
+  border-bottom:1px solid var(--line);
+  transition:background .15s;
+  position:relative;
+}
+.pay-row:last-child { border-bottom:none }
+.pay-row:hover { background:var(--w2) }
+
+.pay-check {
+  width:22px; height:22px; flex-shrink:0;
+  border-radius:50%;
+  border:1.8px solid var(--line2);
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer;
+  transition:all .22s var(--spring);
+}
+.pay-check:hover { border-color:var(--sage); background:var(--sage-bg) }
+.pay-check.done { background:var(--sage); border-color:var(--sage) }
+.pay-check svg { opacity:0; transition:opacity .18s; transform:scale(.8); transition:all .18s var(--spring) }
+.pay-check.done svg { opacity:1; transform:scale(1) }
+
+.pay-name {
+  flex:1; font-size:.85rem; font-weight:600; color:var(--ink);
+  transition:color .2s;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.pay-name.done { color:var(--ink3); text-decoration:line-through }
+
+.pay-amt {
+  font-family:'DM Serif Display',serif;
+  font-size:.95rem; color:var(--ink2);
+  transition:color .2s; flex-shrink:0;
+}
+.pay-amt.done { color:var(--sage) }
+
+.pay-date {
+  font-size:.68rem; font-weight:300; color:var(--ink3);
+  flex-shrink:0; min-width:52px; text-align:right;
+}
+.pay-del {
+  opacity:0; transition:opacity .15s, color .15s, background .15s;
+  padding:4px; border-radius:6px; color:var(--ink3);
+  flex-shrink:0;
+}
+.pay-row:hover .pay-del { opacity:1 }
+.pay-del:hover { color:var(--red); background:var(--red-bg) }
+
+/* ── Progress footer ── */
+.pay-footer {
+  padding:14px 22px 16px;
+  border-top:1px solid var(--line);
+  flex-shrink:0;
+}
+.pay-footer-row {
+  display:flex; justify-content:space-between; align-items:center;
+  margin-bottom:9px;
+}
+.pay-footer-label { font-size:.68rem; font-weight:600; color:var(--ink3) }
+.pay-footer-pct   { font-size:.72rem; font-weight:700; color:var(--sage) }
+.progress-track {
+  height:5px;
+  background:var(--w3);
+  border-radius:50px; overflow:hidden;
+}
+.progress-bar {
+  height:100%;
+  background:linear-gradient(90deg, var(--sage-l), var(--sage));
+  border-radius:50px;
+  transition:width .65s var(--ease);
+  min-width:0;
+}
+.pay-totals {
+  display:flex; justify-content:space-between;
+  margin-top:10px;
+}
+.pay-total-item {
+  font-size:.68rem; color:var(--ink3); font-weight:300;
+}
+.pay-total-item strong { font-weight:700; color:var(--ink2) }
+.pay-total-item.green strong { color:var(--sage) }
+
+/* ── Inline add forms ── */
+.add-form {
+  display:none;
+  padding:14px 22px 16px;
+  background:var(--w2);
+  border-top:1px solid var(--line);
+  gap:10px;
+  flex-direction:column;
+  flex-shrink:0;
+}
+.add-form.open { display:flex }
+.add-form input, .add-form select {
+  padding:9px 12px;
+  border:1.5px solid var(--line2);
+  border-radius:8px;
+  font-size:.83rem;
+  color:var(--ink);
+  background:var(--w);
+  transition:border-color .18s, box-shadow .18s;
+}
+.add-form input:focus, .add-form select:focus {
+  border-color:var(--sage); box-shadow:0 0 0 3px var(--sage-bg);
+}
+.add-form-row { display:flex; gap:8px; align-items:center }
+.add-form-row input { flex:1 }
+.add-form-btns { display:flex; gap:8px; margin-top:2px }
+
+.btn-save {
+  padding:9px 18px;
+  border-radius:8px;
+  font-size:.72rem; font-weight:700;
+  letter-spacing:.07em; text-transform:uppercase;
+  transition:background .18s, transform .18s var(--spring);
+}
+.btn-save.sage  { background:var(--sage); color:#fff }
+.btn-save.sage:hover { background:var(--sage-d); transform:translateY(-1px) }
+.btn-save.terra { background:var(--terra); color:#fff }
+.btn-save.terra:hover { background:#9a5f3a; transform:translateY(-1px) }
+.btn-cancel {
+  padding:9px 12px;
+  border-radius:8px;
+  font-size:.72rem; font-weight:600;
+  color:var(--ink3);
+  transition:background .18s, color .18s;
+}
+.btn-cancel:hover { background:var(--w3); color:var(--ink) }
+
+/* ── Empty state ── */
+.empty {
+  padding:32px 22px;
+  text-align:center;
+  font-size:.82rem; font-style:italic;
+  color:var(--ink3); font-weight:300;
+}
+
+/* ══════════════════════════════════════
+   TOAST
+══════════════════════════════════════ */
+.toast {
+  position:fixed; bottom:26px; right:26px;
+  background:var(--ink);
+  color:#fff;
+  padding:12px 18px 12px 14px;
+  border-radius:12px;
+  font-size:.8rem; font-weight:600;
+  display:flex; align-items:center; gap:10px;
+  box-shadow:0 16px 48px rgba(0,0,0,.28);
+  transform:translateY(70px) scale(.95);
+  opacity:0;
+  transition:transform .4s var(--spring), opacity .3s;
+  z-index:8000;
+  pointer-events:none;
+}
+.toast.show { transform:translateY(0) scale(1); opacity:1 }
+.toast-stripe {
+  width:3px; height:28px;
+  border-radius:3px;
+  background:var(--sage-l);
+  flex-shrink:0;
+}
+
+/* ══════════════════════════════════════
+   SCROLLBAR GLOBAL
+══════════════════════════════════════ */
+::-webkit-scrollbar { width:5px; height:5px }
+::-webkit-scrollbar-track { background:transparent }
+::-webkit-scrollbar-thumb { background:var(--line2); border-radius:50px }
+
+/* ══════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════ */
+@media(max-width:1100px) {
+  .login-left { display:none }
+  .login-right { width:100% }
+  .panels-row { grid-template-columns:1fr }
+}
+@media(max-width:860px) {
+  :root { --sb:0px }
+  .sidebar { transform:translateX(-220px); transition:transform .3s var(--ease) }
+  .sidebar.open { transform:translateX(0) }
+  .main { margin-left:0; padding:24px 20px 48px }
+  .kpi-row { grid-template-columns:1fr 1fr }
+  .topbar { flex-direction:column; gap:12px; align-items:flex-start }
+}
+@media(max-width:560px) {
+  .kpi-row { grid-template-columns:1fr }
+  .login-right { padding:36px 28px }
+}
+
+/* ══ KPI filter pills ══ */
+.kcard-filter {
+  display:flex; gap:4px; flex-wrap:wrap; justify-content:flex-end;
+}
+.kf-btn {
+  padding:4px 9px;
+  border-radius:50px;
+  font-size:.6rem; font-weight:700;
+  letter-spacing:.07em; text-transform:uppercase;
+  color:var(--ink3);
+  background:var(--w3);
+  border:1px solid var(--line2);
+  transition:background .18s, color .18s, border-color .18s;
+  white-space:nowrap;
+}
+.kf-btn:hover { background:var(--terra-bg); color:var(--terra); border-color:var(--terra-bd) }
+.kf-btn.active { background:var(--terra); color:#fff; border-color:var(--terra) }
+
+/* ══ Panel filter pills ══ */
+.panel-filter {
+  display:flex; gap:3px;
+}
+.pf-btn {
+  padding:4px 10px;
+  border-radius:50px;
+  font-size:.6rem; font-weight:700;
+  letter-spacing:.07em; text-transform:uppercase;
+  color:var(--ink3);
+  background:var(--w3);
+  border:1px solid var(--line2);
+  transition:background .18s, color .18s, border-color .18s;
+}
+.pf-btn:hover { background:var(--sage-bg); color:var(--sage); border-color:var(--sage-bd) }
+.pf-btn.active { background:var(--sage); color:#fff; border-color:var(--sage) }
+
+/* ══ Tag clickable toggle on patient row ══ */
+.pat-tag-toggle {
+  padding:3px 9px; border-radius:50px;
+  font-size:.6rem; font-weight:700;
+  letter-spacing:.07em; text-transform:uppercase;
+  cursor:pointer;
+  transition:filter .18s, transform .15s var(--spring);
+  white-space:nowrap;
+  border:1px solid transparent;
+}
+.pat-tag-toggle:hover { filter:brightness(1.12); transform:scale(1.05) }
+.pat-tag-toggle.pb-active  { background:var(--sage-bg); color:var(--sage); border-color:var(--sage-bd) }
+.pat-tag-toggle.pb-new     { background:rgba(37,211,102,.1); color:#19a74a; border-color:rgba(37,211,102,.22) }
+.pat-tag-toggle.pb-paused  { background:var(--terra-bg); color:var(--terra); border-color:var(--terra-bd) }
+</style>
+</head>
+<body>
+
+<!-- ══════════════ LOGIN ══════════════ -->
+<div id="login-page">
+
+  <div class="login-left">
+    <div class="login-brand">
+      <span class="login-brand-name">Mari Pierami</span>
+      <span class="login-brand-crp">CRP 06/12345 · Psicóloga Online</span>
+    </div>
+    <div class="login-left-footer">
+      <p class="login-tagline">Seu espaço<br>para <em>gerir</em> com<br>cuidado.</p>
+      <p class="login-left-sub">Dashboard privado para acompanhar pacientes, faturamento e pagamentos em um só lugar.</p>
+    </div>
+    <div class="login-deco">Admin</div>
+  </div>
+
+  <div class="login-right">
+    <div class="login-form-inner">
+      <p class="lf-eyebrow">Área Restrita</p>
+      <h1 class="lf-title">Bem-vinda<br>de <em>volta</em></h1>
+
+      <div class="lf-field">
+        <label class="lf-label" for="login-email">E-mail</label>
+        <div class="lf-input-wrap">
+          <input class="lf-input" id="login-email" type="email" placeholder="seu@email.com" autocomplete="email">
+          <span class="lf-icon">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg>
+          </span>
+        </div>
+      </div>
+
+      <div class="lf-field">
+        <label class="lf-label" for="login-senha">Senha</label>
+        <div class="lf-input-wrap">
+          <input class="lf-input" id="login-senha" type="password" placeholder="••••••••" autocomplete="current-password">
+          <span class="lf-icon">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          </span>
+        </div>
+      </div>
+
+      <div class="lf-error" id="login-error">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><circle cx="12" cy="16" r=".5" fill="currentColor"/></svg>
+        <span id="login-error-msg"></span>
+      </div>
+
+      <button class="lf-btn" onclick="doLogin()"><span>Entrar no painel →</span></button>
+
+      <div class="lf-hint">
+        <p>Login de teste:<br>
+        <code><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="4322272e2a2d032e22312a332a2631222e2a6d202c2e6d2131">[email&#160;protected]</a></code><br>
+        <code>mari2025</code></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ DASHBOARD ══════════════ -->
+<div id="dashboard-page">
+<div class="layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sb-top">
+      <div class="sb-avatar">M</div>
+      <span class="sb-name">Mari Pierami</span>
+      <span class="sb-role">Administradora</span>
+    </div>
+
+    <nav class="sb-nav">
+      <div class="sb-group-label">Principal</div>
+      <a class="sb-item active">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        Dashboard
+      </a>
+
+      <div class="sb-group-label">Acesso</div>
+      <a class="sb-item" href="index.html" target="_blank">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        Ver Site
+      </a>
+    </nav>
+
+    <div class="sb-bottom">
+      <button class="sb-logout" onclick="doLogout()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Sair da conta
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+
+    <!-- Topbar -->
+    <div class="topbar">
+      <div>
+        <h1 class="tb-greeting">Seu <em>resumo</em> do mês</h1>
+        <p class="tb-date" id="topbar-date"></p>
+      </div>
+      <div class="tb-right">
+        <span class="tb-pill" id="topbar-month"></span>
+      </div>
+    </div>
+
+    <!-- KPIs -->
+    <div class="kpi-row">
+
+            <!-- Pacientes Ativos -->
+      <div class="kcard" style="--stripe-color:var(--terra)">
+        <div class="kcard-stripe"></div>
+        <div class="kcard-body">
+          <div class="kcard-head">
+            <div class="kcard-icon" style="--icon-bg:var(--terra-bg)">🌿</div>
+            <div class="kcard-actions">
+              <!-- filtro de status embutido no card -->
+              <div class="kcard-filter" id="pac-filter">
+                <button class="kf-btn active" data-filter="active" onclick="setPacFilter('active')">Ativos</button>
+                <button class="kf-btn" data-filter="new" onclick="setPacFilter('new')">Novos</button>
+                <button class="kf-btn" data-filter="paused" onclick="setPacFilter('paused')">Pausados</button>
+                <button class="kf-btn" data-filter="all" onclick="setPacFilter('all')">Todos</button>
+              </div>
+            </div>
+          </div>
+          <div class="kcard-label" id="pac-kpi-label">Pacientes Ativos</div>
+          <div class="kcard-value" id="val-pac" style="--val-color:var(--terra)">0</div>
+          <div class="kcard-sub" id="delta-pac">— calculado automaticamente</div>
+        </div>
+        <div class="kcard-spark" id="spark-pac"></div>
+      </div>
+
+      <!-- Recebido -->
+      <div class="kcard" style="--stripe-color:var(--blue)">
+        <div class="kcard-stripe"></div>
+        <div class="kcard-body">
+          <div class="kcard-head">
+            <div class="kcard-icon" style="--icon-bg:var(--blue-bg)">✅</div>
+            <div class="kcard-actions">
+              <button class="kcard-edit" style="visibility:hidden"></button>
+            </div>
+          </div>
+          <div class="kcard-label">Recebido este mês</div>
+          <div class="kcard-value" id="val-rec" style="--val-color:var(--blue)">R$ 0</div>
+          <div class="kcard-sub" id="delta-rec">— calculado automaticamente</div>
+        </div>
+        <div class="kcard-spark" id="spark-rec"></div>
+      </div>
+    </div>
+
+    <!-- Notes strip -->
+    <div class="notes-strip">
+      <div class="notes-icon">📝</div>
+      <div class="notes-body">
+        <div class="notes-label">Notas rápidas do mês</div>
+        <textarea id="notes-textarea" placeholder="Anotações, lembretes, observações..."></textarea>
+        <div class="notes-saved" id="notes-saved">✓ Salvo</div>
+      </div>
+    </div>
+
+    <!-- Panels -->
+    <div class="panels-row">
+
+      <!-- Pacientes panel -->
+      <div class="panel">
+        <div class="panel-head" style="flex-wrap:wrap; gap:10px;">
+          <div class="panel-title">
+            Pacientes
+            <span class="panel-count" id="pat-count">0</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+            <div class="panel-filter" id="panel-pac-filter">
+              <button class="pf-btn active" data-filter="all" onclick="setPanelFilter('all')">Todos</button>
+              <button class="pf-btn" data-filter="active" onclick="setPanelFilter('active')">Ativos</button>
+              <button class="pf-btn" data-filter="new" onclick="setPanelFilter('new')">Novos</button>
+              <button class="pf-btn" data-filter="paused" onclick="setPanelFilter('paused')">Pausados</button>
+            </div>
+            <button class="btn-add green" onclick="toggleAddPatient()">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Novo
+            </button>
+          </div>
+        </div>
+        <div class="panel-scroll" id="patients-list"></div>
+        <div class="add-form" id="add-patient-form">
+          <input id="new-pat-name" type="text" placeholder="Nome completo">
+          <div class="add-form-row">
+            <input id="new-pat-info" type="text" placeholder="Modalidade (ex: Individual · Semanal)">
+            <select id="new-pat-tag">
+              <option value="active">Ativo</option>
+              <option value="new">Novo</option>
+              <option value="paused">Pausado</option>
+            </select>
+          </div>
+          <div class="add-form-btns">
+            <button class="btn-save sage" onclick="savePatient()">Salvar</button>
+            <button class="btn-cancel" onclick="toggleAddPatient()">Cancelar</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pagamentos panel -->
+      <div class="panel">
+        <div class="panel-head">
+          <div class="panel-title">
+            Pagamentos
+            <span class="panel-count" id="pay-count">0</span>
+          </div>
+          <button class="btn-add terra" onclick="toggleAddPay()">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Novo
+          </button>
+        </div>
+        <div class="panel-scroll" id="payments-list"></div>
+        <div class="add-form" id="add-pay-form">
+          <div class="add-form-row">
+            <input id="new-pay-name" type="text" placeholder="Nome do paciente">
+            <input id="new-pay-val" type="number" placeholder="R$ valor" min="0" style="width:110px;flex:none">
+          </div>
+          <div class="add-form-row">
+            <input id="new-pay-date" type="date" style="flex:none;width:160px">
+          </div>
+          <div class="add-form-btns">
+            <button class="btn-save terra" onclick="savePayment()">Salvar</button>
+            <button class="btn-cancel" onclick="toggleAddPay()">Cancelar</button>
+          </div>
+        </div>
+        <div class="pay-footer">
+          <div class="pay-footer-row">
+            <span class="pay-footer-label">Recebimento do mês</span>
+            <span class="pay-footer-pct" id="pay-pct">0%</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-bar" id="progress-fill" style="width:0%"></div>
+          </div>
+          <div class="pay-totals">
+            <span class="pay-total-item">Total previsto: <strong id="pay-total">R$ 0</strong></span>
+            <span class="pay-total-item green">Recebido: <strong id="pay-received">R$ 0</strong></span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast">
+  <div class="toast-stripe"></div>
+  <span id="toast-msg">Salvo!</span>
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+/* ═══ CREDENCIAIS ═══ */
+const CREDS = { email:'admin@maripierami.com.br', senha:'mari2025' };
+
+/* ═══ STORAGE ═══ */
+function load(key, fb) {
+  try { const v = localStorage.getItem('mp_'+key); return v!==null ? JSON.parse(v) : fb } catch { return fb }
+}
+function save(key, val) { localStorage.setItem('mp_'+key, JSON.stringify(val)) }
+
+/* ═══ STATE ═══ */
+let pacKpiFilter    = 'active';
+let panelListFilter = 'all';
+
+/* ═══ INIT ═══ */
+window.onload = () => {
+  if (localStorage.getItem('mp_auth') === '1') showDashboard();
+  else showLogin();
+};
+
+/* ═══ LOGIN / LOGOUT ═══ */
+function showLogin() {
+  document.getElementById('login-page').style.display  = 'flex';
+  document.getElementById('dashboard-page').style.display = 'none';
+}
+function showDashboard() {
+  document.getElementById('login-page').style.display  = 'none';
+  document.getElementById('dashboard-page').style.display = 'block';
+  initDashboard();
+}
+function doLogin() {
+  const email  = document.getElementById('login-email').value.trim().toLowerCase();
+  const senha  = document.getElementById('login-senha').value;
+  const errEl  = document.getElementById('login-error');
+  const errMsg = document.getElementById('login-error-msg');
+  if (email === CREDS.email && senha === CREDS.senha) {
+    localStorage.setItem('mp_auth', '1');
+    errEl.classList.remove('visible');
+    showDashboard();
+  } else {
+    errMsg.textContent = 'E-mail ou senha incorretos.';
+    errEl.classList.add('visible');
+    document.getElementById('login-senha').value = '';
+  }
+}
+function doLogout() { localStorage.removeItem('mp_auth'); showLogin(); }
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && document.getElementById('login-page').style.display !== 'none') doLogin();
+});
+
+/* ═══ DASHBOARD INIT ═══ */
+function initDashboard() {
+  const now = new Date();
+  document.getElementById('topbar-date').textContent =
+    now.toLocaleDateString('pt-BR', {weekday:'long',day:'numeric',month:'long',year:'numeric'})
+       .replace(/^\w/, c => c.toUpperCase());
+  const months = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+  document.getElementById('topbar-month').textContent = months[now.getMonth()] + ' · ' + now.getFullYear();
+  renderKPIs();
+  renderPatients();
+  renderPayments();
+  initNotes();
+  setTimeout(drawSparks, 120);
+}
+
+/* ═══ KPI LABELS ═══ */
+const FILTER_LABELS = {
+  active: 'Pacientes Ativos',
+  new:    'Pacientes Novos',
+  paused: 'Pacientes Pausados',
+  all:    'Total de Pacientes'
+};
+
+function countByTag(list, tag) {
+  return tag === 'all' ? list.length : list.filter(p => p.tag === tag).length;
+}
+
+function renderKPIs() {
+  const list  = load('patients', []);
+  const count = countByTag(list, pacKpiFilter);
+  document.getElementById('val-pac').textContent     = count;
+  document.getElementById('pac-kpi-label').textContent = FILTER_LABELS[pacKpiFilter] || 'Pacientes';
+  const ativos   = countByTag(list, 'active');
+  const novos    = countByTag(list, 'new');
+  const pausados = countByTag(list, 'paused');
+  const subs = { active: `${novos} novos · ${pausados} pausados`, new: `${ativos} ativos · ${pausados} pausados`,
+                 paused: `${ativos} ativos · ${novos} novos`,    all: `${ativos} ativos · ${novos} novos · ${pausados} pausados` };
+  document.getElementById('delta-pac').textContent = list.length ? subs[pacKpiFilter] : '— nenhum cadastrado';
+  updateRecebido();
+  drawSparks();
+}
+
+function setPacFilter(f) {
+  pacKpiFilter = f;
+  document.querySelectorAll('#pac-filter .kf-btn').forEach(b => b.classList.toggle('active', b.dataset.filter === f));
+  renderKPIs();
+}
+
+function setPanelFilter(f) {
+  panelListFilter = f;
+  document.querySelectorAll('#panel-pac-filter .pf-btn').forEach(b => b.classList.toggle('active', b.dataset.filter === f));
+  renderPatients();
+}
+
+function updateRecebido() {
+  const pays     = load('payments', []);
+  const received = pays.filter(p => p.paid).reduce((s,p) => s + p.value, 0);
+  const total    = pays.reduce((s,p) => s + p.value, 0);
+  document.getElementById('val-rec').textContent   = 'R$ ' + received.toLocaleString('pt-BR');
+  const pct = total > 0 ? Math.round((received / total) * 100) : 0;
+  document.getElementById('delta-rec').textContent = `${pays.filter(p=>p.paid).length} de ${pays.length} pagamentos confirmados`;
+  document.getElementById('pay-pct').textContent   = pct + '%';
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('pay-total').textContent    = 'R$ ' + total.toLocaleString('pt-BR');
+  document.getElementById('pay-received').textContent = 'R$ ' + received.toLocaleString('pt-BR');
+}
+
+/* ═══ SPARKLINES ═══ */
+function drawSparks() {
+  const list = load('patients', []);
+  const pac  = countByTag(list, pacKpiFilter);
+  const pays = load('payments', []);
+  const rec  = pays.filter(p => p.paid).reduce((s,p) => s + p.value, 0);
+  const makeSpark = (el, val, max, color) => {
+    if (!el || !max) { if(el) el.innerHTML=''; return }
+    const w=el.offsetWidth||180, h=32, pts=7, seed=val||1;
+    const rng = i => ((Math.sin(seed*9301+i*49297+233*i*i)*826)%1+1)/2;
+    const ys = Array.from({length:pts}, (_,i) => rng(i));
+    ys[pts-1] = val/max;
+    const xs = Array.from({length:pts}, (_,i) => i/(pts-1)*w);
+    const yS = ys.map(y => h-4-(y*(h-8)));
+    let path = `M${xs[0]},${yS[0]}`;
+    for (let i=1;i<pts;i++) { const cx=(xs[i]+xs[i-1])/2; path+=` C${cx},${yS[i-1]} ${cx},${yS[i]} ${xs[i]},${yS[i]}`; }
+    const area = path + ` L${xs[pts-1]},${h} L${xs[0]},${h} Z`;
+    const id = 'sg' + color.replace(/[^a-z0-9]/gi,'');
+    el.innerHTML = `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">
+      <defs><linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="${color}" stop-opacity=".16"/>
+        <stop offset="100%" stop-color="${color}" stop-opacity="0"/>
+      </linearGradient></defs>
+      <path d="${area}" fill="url(#${id})"/>
+      <path d="${path}" fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="${xs[pts-1]}" cy="${yS[pts-1]}" r="2.5" fill="${color}"/></svg>`;
+  };
+  makeSpark(document.getElementById('spark-pac'), pac, Math.max(pac,20), '#B07048');
+  makeSpark(document.getElementById('spark-rec'), rec, Math.max(rec,1000), '#4A7FA5');
+}
+window.addEventListener('resize', drawSparks);
+
+/* ═══ PACIENTES ═══ */
+const AV_COLORS = ['av-0','av-1','av-2','av-3'];
+const TAG_MAP   = { active:['Ativo','pb-active'], new:['Novo','pb-new'], paused:['Pausado','pb-paused'] };
+
+function renderPatients() {
+  const all  = load('patients', []);
+  const list = panelListFilter === 'all' ? all : all.filter(p => p.tag === panelListFilter);
+  const el   = document.getElementById('patients-list');
+  document.getElementById('pat-count').textContent =
+    panelListFilter === 'all' ? all.length : `${list.length}/${all.length}`;
+  if (!all.length)  { el.innerHTML = '<div class="empty">Nenhum paciente cadastrado ainda.</div>'; return; }
+  if (!list.length) { el.innerHTML = '<div class="empty">Nenhum paciente com esse status.</div>';  return; }
+  el.innerHTML = list.map(p => {
+    const i = all.indexOf(p);
+    const [label, cls] = TAG_MAP[p.tag] || TAG_MAP.active;
+    const initials = p.name.split(' ').slice(0,2).map(w => w[0]||'').join('').toUpperCase();
+    return `<div class="pat-row">
+      <div class="pat-av ${AV_COLORS[i%4]}">${initials}</div>
+      <div class="pat-info">
+        <div class="pat-name">${escHtml(p.name)}</div>
+        <div class="pat-meta">${escHtml(p.info||'Individual')}</div>
+      </div>
+      <button class="pat-tag-toggle ${cls}" onclick="cycleTag(${i})" title="Clique para mudar status">${label}</button>
+      <button class="pat-del" onclick="deletePatient(${i})" title="Remover">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>`;
+  }).join('');
+}
+
+function cycleTag(i) {
+  const list  = load('patients', []);
+  const cycle = { active:'new', new:'paused', paused:'active' };
+  list[i].tag = cycle[list[i].tag] || 'active';
+  save('patients', list);
+  renderPatients();
+  renderKPIs();
+  showToast('Status: ' + TAG_MAP[list[i].tag][0]);
+}
+
+function toggleAddPatient() {
+  const f = document.getElementById('add-patient-form');
+  const open = f.classList.toggle('open');
+  if (open) document.getElementById('new-pat-name').focus();
+  else { document.getElementById('new-pat-name').value = ''; document.getElementById('new-pat-info').value = ''; }
+}
+function savePatient() {
+  const name = document.getElementById('new-pat-name').value.trim();
+  if (!name) return;
+  const info = document.getElementById('new-pat-info').value.trim();
+  const tag  = document.getElementById('new-pat-tag').value;
+  const list = load('patients', []);
+  list.push({name, info, tag});
+  save('patients', list);
+  toggleAddPatient(); renderPatients(); renderKPIs();
+  showToast('✓ Paciente adicionado!');
+}
+function deletePatient(i) {
+  const list = load('patients', []);
+  list.splice(i, 1);
+  save('patients', list);
+  renderPatients(); renderKPIs();
+  showToast('Paciente removido.');
+}
+
+/* ═══ PAGAMENTOS ═══ */
+function renderPayments() {
+  const pays = load('payments', []);
+  const el   = document.getElementById('payments-list');
+  document.getElementById('pay-count').textContent = pays.length;
+  if (!pays.length) { el.innerHTML = '<div class="empty">Nenhum pagamento registrado ainda.</div>'; updateRecebido(); return; }
+  el.innerHTML = pays.map((p,i) => `
+    <div class="pay-row">
+      <div class="pay-check ${p.paid?'done':''}" onclick="togglePay(${i})">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3.5"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <span class="pay-name ${p.paid?'done':''}">${escHtml(p.name)}</span>
+      <span class="pay-amt  ${p.paid?'done':''}">R$ ${Number(p.value).toLocaleString('pt-BR')}</span>
+      <span class="pay-date">${p.date||'—'}</span>
+      <button class="pay-del" onclick="deletePayment(${i})" title="Remover">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>`).join('');
+  updateRecebido();
+}
+function toggleAddPay() {
+  const f = document.getElementById('add-pay-form');
+  const open = f.classList.toggle('open');
+  if (open) { document.getElementById('new-pay-name').focus(); document.getElementById('new-pay-date').value = new Date().toISOString().split('T')[0]; }
+  else { document.getElementById('new-pay-name').value = ''; document.getElementById('new-pay-val').value = ''; }
+}
+function savePayment() {
+  const name  = document.getElementById('new-pay-name').value.trim();
+  const value = parseFloat(document.getElementById('new-pay-val').value) || 0;
+  const date  = document.getElementById('new-pay-date').value;
+  if (!name || !value) return;
+  const fmt  = date ? new Date(date+'T12:00:00').toLocaleDateString('pt-BR', {day:'2-digit',month:'short'}) : '';
+  const pays = load('payments', []);
+  pays.push({name, value, date:fmt, paid:false});
+  save('payments', pays); toggleAddPay(); renderPayments();
+  showToast('✓ Pagamento adicionado!');
+}
+function togglePay(i) {
+  const pays = load('payments', []);
+  pays[i].paid = !pays[i].paid;
+  save('payments', pays); renderPayments();
+  showToast(pays[i].paid ? '✓ Pagamento confirmado!' : 'Pagamento desmarcado.');
+}
+function deletePayment(i) {
+  const pays = load('payments', []);
+  pays.splice(i, 1);
+  save('payments', pays); renderPayments();
+  showToast('Pagamento removido.');
+}
+
+/* ═══ NOTES ═══ */
+function initNotes() {
+  const ta = document.getElementById('notes-textarea');
+  ta.value = load('notes', '');
+  ta.style.height = 'auto'; ta.style.height = ta.scrollHeight + 'px';
+  let timer;
+  ta.addEventListener('input', () => {
+    ta.style.height = 'auto'; ta.style.height = ta.scrollHeight + 'px';
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      save('notes', ta.value);
+      const s = document.getElementById('notes-saved');
+      s.classList.add('show'); setTimeout(() => s.classList.remove('show'), 1800);
+    }, 600);
+  });
+}
+
+/* ═══ TOAST ═══ */
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  document.getElementById('toast-msg').textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+/* ═══ UTILS ═══ */
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+</script>
+</body>
+</html>
